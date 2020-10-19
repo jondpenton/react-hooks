@@ -3,7 +3,7 @@
 
 import React from 'react'
 
-function Greeting({ initialName = '' }) {
+function Greeting({ initialName }) {
   const [name, setName] = useLocalStorageState({
     key: 'name',
     initialValue: initialName,
@@ -23,7 +23,7 @@ function Greeting({ initialName = '' }) {
   )
 }
 
-function useLocalStorageState({ key, initialValue }) {
+function useLocalStorageState({ key, initialValue = '' }) {
   const [value, setValue] = React.useState(
     () => window.localStorage.getItem(key) || initialValue,
   )
