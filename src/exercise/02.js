@@ -24,12 +24,22 @@ function Greeting({ initialName }) {
 }
 
 function useLocalStorageState({ key, initialValue = '' }) {
-  const [value, setValue] = React.useState(
-    () => window.localStorage.getItem(key) || initialValue,
-  )
+  const [value, setValue] = React.useState(() => {
+    const value = window.localStorage.getItem(key) || initialValue
+
+    if (value) {
+      try {
+        const parsedValue = JSON.parse(value)
+
+        return parsedValue
+      } catch (err) {}
+    }
+
+    return value
+  })
 
   React.useEffect(() => {
-    window.localStorage.setItem(key, value)
+    window.localStorage.setItem(key, JSON.stringify(value))
   }, [value, key])
 
   return [value, setValue]
