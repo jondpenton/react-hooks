@@ -27,15 +27,14 @@ function useLocalStorageState({ key, initialValue = '' }) {
   const [value, setValue] = React.useState(() => {
     const value = window.localStorage.getItem(key) || initialValue
 
-    if (value) {
-      try {
-        const parsedValue = JSON.parse(value)
+    try {
+      const parsedValue = JSON.parse(value)
 
-        return parsedValue
-      } catch (err) {}
+      return parsedValue
+    } catch (err) {
+      console.error(err.message, { value })
+      return initialValue
     }
-
-    return value
   })
 
   React.useEffect(() => {
