@@ -23,23 +23,33 @@ function Greeting({ initialName }) {
   )
 }
 
-function useLocalStorageState({ key, initialValue = '' }) {
+function useLocalStorageState({
+  key,
+  initialValue = '',
+  serialize = JSON.stringify,
+  deserialize = JSON.parse,
+}) {
   const [value, setValue] = React.useState(() => {
     const value = window.localStorage.getItem(key) || initialValue
 
     try {
-      const parsedValue = JSON.parse(value)
+      const parsedValue = deserialize(value)
 
       return parsedValue
     } catch (err) {
       console.error(err.message, { value })
+
+      if (typeof initialValue === 'function') {
+        return initialValue()
+      }
+
       return initialValue
     }
   })
 
   React.useEffect(() => {
-    window.localStorage.setItem(key, JSON.stringify(value))
-  }, [value, key])
+    window.localStorage.setItem(key, serialize(value))
+  }, [value, key, serialize])
 
   return [value, setValue]
 }
