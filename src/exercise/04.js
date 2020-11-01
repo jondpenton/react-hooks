@@ -6,7 +6,25 @@ import React from 'react'
 const squaresDefault = Array(9).fill(null)
 
 function Board() {
-  const [squares, setSquares] = React.useState(squaresDefault)
+  const [squares, setSquares] = React.useState(() => {
+    const value = localStorage.getItem('squares')
+
+    if (!value) {
+      return squaresDefault
+    }
+
+    try {
+      return JSON.parse(value)
+    } catch (err) {
+      console.debug(err)
+      return squaresDefault
+    }
+  })
+
+  React.useEffect(() => {
+    localStorage.setItem('squares', JSON.stringify(squares))
+  }, [squares])
+
   const nextValue = calculateNextValue(squares)
   const winner = calculateWinner(squares)
   const status = calculateStatus(winner, squares, nextValue)
