@@ -16,13 +16,7 @@ function FavoriteAnimal({ animal, onAnimalChange }) {
   return (
     <div>
       <label htmlFor='animal'>Favorite Animal: </label>
-      <input
-        id='animal'
-        value={animal}
-        onChange={event => {
-          onAnimalChange(event.target.value)
-        }}
-      />
+      <input id='animal' value={animal} onChange={onAnimalChange} />
     </div>
   )
 }
@@ -35,14 +29,17 @@ function App() {
   const [name, setName] = React.useState('')
   const [animal, setAnimal] = React.useState('')
 
-  const handleAnimalChange = value => {
-    setAnimal(value)
+  const handleChange = setValue => event => {
+    setValue(event.target.value)
   }
 
   return (
     <form>
-      <Name name={name} onNameChange={event => setName(event.target.value)} />
-      <FavoriteAnimal animal={animal} onAnimalChange={handleAnimalChange} />
+      <Name name={name} onNameChange={handleChange(setName)} />
+      <FavoriteAnimal
+        animal={animal}
+        onAnimalChange={handleChange(setAnimal)}
+      />
       <Display name={name} animal={animal} />
     </form>
   )
